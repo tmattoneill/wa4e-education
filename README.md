@@ -3,3 +3,7 @@ In this assignment you will extend our simple resume database to support Create,
 
 https://www.wa4e.com/assn/res-education/ \
 https://www.wa4e.com/solutions/res-education/
+
+## MySQL Backup / restore
+Use the .sql file in the data directory to restore the mysql db. 
+`$ mysql -u root -p misc_backup < data\misc.sql`
