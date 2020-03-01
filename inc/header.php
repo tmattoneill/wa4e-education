@@ -1,4 +1,4 @@
-	<title>Matt O'Neill Resume Registry</title>
+	<title>Matt O'Neill Education Manager</title>
 
     <meta charset="utf-8">
     <meta name="viewport" 
