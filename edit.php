@@ -4,7 +4,7 @@
 
 	require_once("inc/config.php");	
 
-	reqruire_login();
+	require_login();
 
 	// User has clicked Cancel on form. Back out o the index page
 	if ( isset($_POST["cancel"])) {

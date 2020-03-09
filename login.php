@@ -18,9 +18,8 @@
 		} 
 
 		if ( check_password() ) {
-			$row = get_user();
+			$row = get_user($pdo);
 			$_SESSION['user_id'] = $row['user_id'];
-			$_SESSION['email'] = htmlentities($row['email']);
 			$_SESSION['name'] = htmlentities($row['name']);
 			$_SESSION['success'] = "Welcome, ".$_SESSION["name"].".";
 			header("Location: index.php");
@@ -33,10 +32,6 @@
 		}
 
 	}
-
-/* PHP Helper functions */
-
-
 
 ?>
 

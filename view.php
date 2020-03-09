@@ -3,6 +3,8 @@
 
 	require_login("index.php", ERR_LOGIN_REQD);
 
+	// removed the profle_id check; this might break things; 
+
 	if ( exists_in_db($pdo, "profile_id", "Profile", $_GET["profile_id"])) {
 		$profile_id = $_GET["profile_id"];
 

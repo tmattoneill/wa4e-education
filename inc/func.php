@@ -61,9 +61,8 @@
 	    
 	}
 	
-	function get_user () {
-	    global $pdo;
-	    
+	function get_user ($pdo) {
+
 	    $stmt = $pdo->prepare("SELECT user_id, name, email
 						   FROM users
 						   WHERE email = :em");
@@ -116,6 +115,7 @@
 	}
 
 	function require_login($destination=null, $err=null) {
+
 		if (! isset($_SESSION["user_id"])) {  // Not logged in
 			if ( isset($destination)) {
 				$_SESSION["error"] = $err;

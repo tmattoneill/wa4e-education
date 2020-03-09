@@ -1,9 +1,9 @@
 <?php
 
 	session_start();
-	unset($_SESSION['email']);
-	unset($_SESSION['user_id']);
-	unset($_SESSION['name']);
+	foreach ($_SESSION as $key => $value) {
+		unset($_SESSION[$key]);
+	}
 	header('Location: index.php');
 
 ?>
