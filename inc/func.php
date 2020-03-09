@@ -114,16 +114,43 @@
 		} 
 	}
 
-	function require_login($destination=null, $err=null) {
+	function require_login($msg=null, $dest=null) {
 
 		if (! isset($_SESSION["user_id"])) {  // Not logged in
-			if ( isset($destination)) {
-				$_SESSION["error"] = $err;
-				header("Location: $destination");
-				exit;
+			if ( isset($dest)) {
+				err_redir($msg, $dest);
 			} else
 				die(ERR_NO_ACCESS);
 		}
+	}
+
+	function err_redir($msg, $dest) {
+		$_SESSION["error"] = $msg;
+		header("Location: $dest");
+		exit();
+	}
+
+	function validate_position() {
+  		for($i=1; $i<=9; $i++) {
+		    if ( ! isset($_POST['year'][$i]) ) continue;
+		    if ( ! isset($_POST['desc'][$i]) ) continue;
+
+		    $year = $_POST['year'][$i];
+		    $desc = $_POST['desc'][$i];
+
+		    if ( strlen($year) == 0 || strlen($desc) == 0 ) {
+		      return "All fields are required";
+	    }
+
+	    if ( ! is_numeric($year) ) {
+	      return "Position year must be numeric";
+	    }
+	  }
+	  return true;
+	}
+
+	function alert_out($str) {
+		print "<script>alert(\"" . var_dump($str). "\")</script>";
 	}
 	
 ?>

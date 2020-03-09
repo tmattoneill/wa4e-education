@@ -1,11 +1,9 @@
 <?php
 	require_once("inc/config.php");
 
-	require_login("index.php", ERR_LOGIN_REQD);
-
-	// removed the profle_id check; this might break things; 
-
-	if ( exists_in_db($pdo, "profile_id", "Profile", $_GET["profile_id"])) {
+	if (! isset($_GET["profile_id"])) {
+		err_redir(ERR_NO_PROFILE_ID, "index.php");
+	} else if ( exists_in_db($pdo, "profile_id", "Profile", $_GET["profile_id"])) {
 		$profile_id = $_GET["profile_id"];
 
 		$sql = "SELECT first_name, last_name, email, headline, summary
@@ -25,9 +23,7 @@
 		$position = $stmt->fetch(PDO::FETCH_ASSOC);
 
 	} else {
-		$_SESSION["error"] = ERR_NO_PROFILE;
-		header("Location: index.php");
-		exit;
+		err_redir(ERR_NO_PROFILE, "index.php");
 	}
 
 ?>

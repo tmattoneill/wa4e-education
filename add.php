@@ -14,28 +14,20 @@
 		foreach ($_POST as $key => $value) {  // Check all fields for empty strings
 			
 			if ($value == "") {
-				$_SESSION["error"] = ERR_EMPTY_FIELDS;
-				header("Location: add.php");
-				exit;
+				err_redir(ERR_EMPTY_FIELDS, "add.php");
 			}
 
 			if ( strpos($key, "year") && (! is_numeric($_POST[$key])) ) {
-				$_SESSION["error"] = "Year must contain only numbers";
-				header("Location add.php");
-				exit;
+				err_redir(ERR_NUMERIC_ONLY, "add.php");
 			}
 		}
 
-		if (! is_bool($err = validatePos()) ) {
-			$_SESSION["error"] = $err;
-			header("Location: add.php");
-			exit;
+		if (! is_bool($err = validate_position()) ) {
+			err_redir($err, "add.php");
 		}
 
 		if (! strrpos($_POST["email"], "@") ) { // Check for @ in email address
-			$_SESSION["error"] = ERR_EMAIL;
-			header("Location: add.php");
-			exit;
+			err_redir(ERR_EMAIL, "add.php");
 		}
 
 		$stmt = $pdo->prepare('INSERT INTO Profile (user_id, first_name, last_name, email, headline, summary)
@@ -70,31 +62,6 @@
     	header("Location: index.php");
     	exit;
 
-	}
-
-// PHP Helper Functions
-
-	function validatePos() {
-  		for($i=1; $i<=9; $i++) {
-		    if ( ! isset($_POST['year'][$i]) ) continue;
-		    if ( ! isset($_POST['desc'][$i]) ) continue;
-
-		    $year = $_POST['year'][$i];
-		    $desc = $_POST['desc'][$i];
-
-		    if ( strlen($year) == 0 || strlen($desc) == 0 ) {
-		      return "All fields are required";
-	    }
-
-	    if ( ! is_numeric($year) ) {
-	      return "Position year must be numeric";
-	    }
-	  }
-	  return true;
-	}
-
-	function alert_out($str) {
-		print "<script>alert(\"" . var_dump($str). "\")</script>";
 	}
 
 ?>

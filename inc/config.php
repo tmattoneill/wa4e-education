@@ -13,6 +13,7 @@
 	define ("ERR_NO_PROFILE", "Could not load profile");
 	define ("ERR_NO_PROFILE_ID", "Missing profile_id");
 	define ("ERR_LOGIN_REQD", "You must be logged in to view that page.");
+	define ("ERR_NUMERIC_ONLY", "This field must contain only numbers.");
 
 	// vars needed throughout the app
 	$salt = 'XyZzy12*_';
