@@ -160,7 +160,7 @@
 				num_positions++;
 
 				window.console && console.log("Adding position " + num_positions);
-
+				/* Replace with the script/template model */
 				$('#position_fields').append(
 					'<div id="position' + num_positions + '"> \
 					<h3>Position: ' + num_positions + '</h3> \
