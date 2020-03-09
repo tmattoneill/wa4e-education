@@ -111,7 +111,7 @@
 <div class="container" id="main-content">
 	<h1> Adding Profile for <?= $_SESSION["name"] ?></h1>
 	<!-- flash error -->
-	<?php include("inc/flash.php"); ?>
+	<?php flash_msg(); ?>
 	<form name="add_user" method="post" action="add.php">
 		<div class="form-group">
 			<label for="txt_fname">First Name</label>

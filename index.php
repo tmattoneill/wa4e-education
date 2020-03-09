@@ -16,7 +16,7 @@
 	<h1>Welcome to the Profiles Database</h1>
 
 	<?php 
-		include("inc/flash.php");
+		flash_msg();
 		
 		echo $msg;
 
