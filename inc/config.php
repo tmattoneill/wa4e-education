@@ -12,6 +12,7 @@
 	define ("ERR_DUPE_EMAIL", "A profile for that email address already exists.");
 	define ("ERR_NO_PROFILE", "Could not load profile");
 	define ("ERR_NO_PROFILE_ID", "Missing profile_id");
+	define ("ERR_LOGIN_REQD", "You must be logged in to view that page.");
 
 	// vars needed throughout the app
 	$salt = 'XyZzy12*_';

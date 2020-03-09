@@ -1,9 +1,10 @@
-<?php
+<?php // delete.php
+	  // author: Matt O'Neill
+	  // March 2020
+
 	require_once("inc/config.php");
 
-	if (! isset($_SESSION["user_id"])) {  // Not logged in
-		die(ERR_NO_ACCESS);
-	}
+	require_login();
 
     if ( isset($_POST['delete']) && isset($_POST['profile_id']) ) {
 	    $sql = "DELETE FROM Profile WHERE profile_id = :pid";

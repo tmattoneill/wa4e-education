@@ -2,9 +2,7 @@
 
 	require_once("inc/config.php");
 
-	if (! isset($_SESSION["user_id"])) {  // Not logged in
-		die(ERR_NO_ACCESS);
-	}
+	require_login();
 
 	if ( isset($_POST["cancel"])) {
 		header("Location: index.php");

@@ -1,15 +1,10 @@
 <?php // edit.php 
 	  // author: Matt O'Neill
 	  // February, 2020
-	require_once("inc/config.php");
-	
 
-	// Not logged in. Throw fatl NO ACCESS error and terminate. No real
-	// reason not to redirect to the index page here or prompt for a
-	// login.
-	if (! isset($_SESSION["user_id"])) {
-		die(ERR_NO_ACCESS);
-	}
+	require_once("inc/config.php");	
+
+	reqruire_login();
 
 	// User has clicked Cancel on form. Back out o the index page
 	if ( isset($_POST["cancel"])) {

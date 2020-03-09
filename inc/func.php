@@ -114,5 +114,16 @@
 
 		} 
 	}
+
+	function require_login($destination=null, $err=null) {
+		if (! isset($_SESSION["user_id"])) {  // Not logged in
+			if ( isset($destination)) {
+				$_SESSION["error"] = $err;
+				header("Location: $destination");
+				exit;
+			} else
+				die(ERR_NO_ACCESS);
+		}
+	}
 	
 ?>
