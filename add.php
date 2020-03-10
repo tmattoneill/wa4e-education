@@ -10,7 +10,7 @@
 	}
 
 	if ( isset($_POST["add"]) ) {          // Coming from form
-
+	// FORM VALIDATION
 		foreach ($_POST as $key => $value) {  // Check all fields for empty strings
 			
 			if ($value == "") {
@@ -29,7 +29,8 @@
 		if (! strrpos($_POST["email"], "@") ) { // Check for @ in email address
 			err_redir(ERR_EMAIL, "add.php");
 		}
-
+	// FORM VALIDATED CONTINUE
+		
 		$stmt = $pdo->prepare('INSERT INTO Profile (user_id, first_name, last_name, email, headline, summary)
         					   VALUES ( :uid, :fn, :ln, :em, :he, :su)');
     	$stmt->execute(array(
