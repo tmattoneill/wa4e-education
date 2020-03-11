@@ -30,7 +30,7 @@
 			err_redir(ERR_EMAIL, "add.php");
 		}
 	// FORM VALIDATED CONTINUE
-		
+
 		$stmt = $pdo->prepare('INSERT INTO Profile (user_id, first_name, last_name, email, headline, summary)
         					   VALUES ( :uid, :fn, :ln, :em, :he, :su)');
     	$stmt->execute(array(
@@ -78,6 +78,8 @@
 	<h1> Adding Profile for <?= $_SESSION["name"] ?></h1>
 	<!-- flash error -->
 	<?php flash_msg(); ?>
+
+	<!-- User Form -->
 	<form name="add_user" method="post" action="add.php">
 		<div class="form-group">
 			<label for="txt_fname">First Name</label>
@@ -95,6 +97,12 @@
 			<label for="txt_fname">Summary</label>
 			<textarea name="summary" id="txta_summary" rows="10" class="form-control"></textarea><br>
 
+			<!-- Education Management -->
+			<p>Education / School <input type="submit" id="add_school" name="add_sch" value="+"></p>
+			<div id="education_fields">
+			</div>
+			<!-- End Education Management -->
+
 			<!-- Position Management -->
 			<p>Position <input type="submit" id="add_position" name="add_pos" value="+"></p>
 			<div id="position_fields">
@@ -108,16 +116,21 @@
 			<input type="submit" name="cancel" value="Cancel" class="btn">
 		</div>
 	</form>
+	<!-- End Form -->
 
 </div>
+	<!-- Dynamically add Position year and description via jquery -->
 	<script>
-		<!-- Dynamically add Position year and description via jquery -->
+		
 		num_positions = 0;
+		num_education = 0;
 
 		$(document).ready(function(){
-			window.console && console.log("Document ready called");
+			// Add in a position to the page
 			$('#add_position').click( function(event) {
+
 				event.preventDefault();
+
 				if ( num_positions >= 9 ) {
 					alert("Maximum of nine position entries exceeded.");
 					return;
@@ -125,8 +138,6 @@
 
 				num_positions++;
 
-				window.console && console.log("Adding position " + num_positions);
-				/* Replace with the script/template model */
 				$('#position_fields').append(
 					'<div id="position' + num_positions + '"> \
 					<h3>Position: ' + num_positions + '</h3> \
@@ -139,9 +150,35 @@
 					 <input type="hidden" name="position[' + num_positions + ']" value="' + num_positions + '"> \
 					 </div>');				
 			});
+
+			$('add_education').click( function(event)) {
+				event.preventDefault();
+				if ( num_education >= 9 ) {
+					alert("Maximum of nine schools exceeded.");
+					return;
+				}
+
+				num_education++;
+
+				/* Replace with the script/template model */
+				var source_edu = $('edu-template').html();
+				$('education_fields').append(source.replace(/%COUNT%/g, num_education));
+
+
+			}	
 		});
 	</script>
 	<?php include("inc/footer.php");?>
+
+	<!-- TEMPLATE USES %COUNT% FOR VARIABLE-->
+	<script id="edu-template" type="text">
+		<div id="school_%COUNT%"> 
+			 <p>Year: <input type="text" name="edu_year_%COUNT%" value="">
+			 	<input type="button" name="rem_edu" value="-" 
+			 		   onclick="$('#school_%COUNT%').remove(); return false;"">
+			 </p>
+		 </div>
+	</script>
 </body>
 
 </html>
