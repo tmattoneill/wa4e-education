@@ -98,7 +98,7 @@
 			<textarea name="summary" id="txta_summary" rows="10" class="form-control"></textarea><br>
 
 			<!-- Education Management -->
-			<p>Education / School <input type="submit" id="add_school" name="add_sch" value="+"></p>
+			<p>Education / School <input type="submit" id="add_education" name="add_sch" value="+"></p>
 			<div id="education_fields">
 			</div>
 			<!-- End Education Management -->
@@ -126,17 +126,18 @@
 		num_education = 0;
 
 		$(document).ready(function(){
+
 			// Add in a position to the page
 			$('#add_position').click( function(event) {
 
 				event.preventDefault();
 
+				num_positions++;
+
 				if ( num_positions >= 9 ) {
 					alert("Maximum of nine position entries exceeded.");
 					return;
 				}
-
-				num_positions++;
 
 				$('#position_fields').append(
 					'<div id="position' + num_positions + '"> \
@@ -151,21 +152,28 @@
 					 </div>');				
 			});
 
-			$('add_education').click( function(event)) {
+			// Addd educaiton / school to the page
+			$('#add_education').click( function(event) {
+
 				event.preventDefault();
+
+				num_education++;				
+				
 				if ( num_education >= 9 ) {
 					alert("Maximum of nine schools exceeded.");
 					return;
 				}
 
-				num_education++;
-
 				/* Replace with the script/template model */
-				var source_edu = $('edu-template').html();
-				$('education_fields').append(source.replace(/%COUNT%/g, num_education));
+				var source_edu = $('#edu-template').html();
+				
+				$('#education_fields').append(source_edu.replace(/%COUNT%/g, num_education));
+				console.log(source_edu.replace(/%COUNT%/g, num_education));
 
+			//Typeahed code for the School field
+			$('.school').autocomplete({ source: 'school.php'});
 
-			}	
+			});
 		});
 	</script>
 	<?php include("inc/footer.php");?>
@@ -175,7 +183,9 @@
 		<div id="school_%COUNT%"> 
 			 <p>Year: <input type="text" name="edu_year_%COUNT%" value="">
 			 	<input type="button" name="rem_edu" value="-" 
-			 		   onclick="$('#school_%COUNT%').remove(); return false;"">
+			 		   onclick="$('#school_%COUNT%').remove(); return false;"><br />
+			 	<label for ="txt_sch_%COUNT%">School:</label>   
+			 	<input type="text" size=80 name="school_%COUNT%" class="school" value="" id="txt_sch_%COUNT%">
 			 </p>
 		 </div>
 	</script>
