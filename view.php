@@ -17,27 +17,35 @@
 		$profile = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
-		// Output the positions / experience
-		// Currently returns a single row; improvement could be to return the 
-		// Full array.
-		/* $sql = "SELECT * FROM position WHERE profile_id=? ORDER BY year DESC";
-		$stmt = $pdo->prepare($sql);
-		$stmt->bindValue(1, $profile_id);
-		$stmt->execute();
-		$position = $stmt->fetch(PDO::FETCH_ASSOC); */
 
 	} else {
 		err_redir(ERR_NO_PROFILE, "index.php");
 	}
 
+
+// Helper functions
+
 function get_position($pdo, $profile_id) {
 
-		$sql = "SELECT * FROM position WHERE profile_id=? ORDER BY year DESC";
-		$stmt = $pdo->prepare($sql);
-		$stmt->bindValue(1, $profile_id);
-		$stmt->execute();
+	$sql = "SELECT * FROM position WHERE profile_id=? ORDER BY year DESC";
+	$stmt = $pdo->prepare($sql);
+	$stmt->bindValue(1, $profile_id);
+	$stmt->execute();
 
-		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function get_education($pdo, $profile_id) {
+	$sql = "SELECT Institution.name, Education.year 
+			from Profile 
+				join Education on Profile.profile_id = Education.profile_id
+				join Institution on Education.institution_id = Institution.institution_id 
+			where Profile.profile_id=?";
+	$stmt = $pdo->prepare($sql);
+	$stmt->bindValue(1, $profile_id);
+	$stmt->execute();
+
+	return $stmt->fetchAll(PDO::FETCH_ASSOC);	
 }
 
 ?>
@@ -63,24 +71,25 @@ function get_position($pdo, $profile_id) {
 		print "<hr>";
 		
 		if ( $position = get_position($pdo, $profile_id) ) {
-			print "<h3>Positions</h3>";
+			print "<h3>Positions</h3><ul>";
 		}
 
 		for ($i=0; $i < sizeof($position); $i++) {
 			echo '<li>' . $position[$i]['year'] . ': ';
 			echo $position[$i]['description'] . '</li>';
 		}
-		
-		/*foreach ($position as $key => $value ) {
-			print "<h3>Position</h3>\n<ul>";
-			do {
-				$year = htmlentities($position["year"]);
-				$desc = htmlentities($position["description"]);
-				print "<li>" . $year . ": " . $desc . "</li>";				
-			} while ( $position );
+
+		if ( $education = get_education($pdo, $profile_id) ) {
+			print "</ul><h3>Education / Schools</h3></ul>";
 		}
 
-			print "</ul>"; */
+		for ($i=0; $i < sizeof($education); $i++) {
+			echo '<li>' . $education[$i]['year'] . ': ';
+			echo $education[$i]['name'] . '</li>';
+		}
+		print "</ul>";
+
+		
 	?>
 	<p><a href="index.php">Done</a></p>
 
