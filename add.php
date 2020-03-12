@@ -164,14 +164,13 @@
 					return;
 				}
 
-				/* Replace with the script/template model */
 				var source_edu = $('#edu-template').html();
 				
 				$('#education_fields').append(source_edu.replace(/%COUNT%/g, num_education));
 				console.log(source_edu.replace(/%COUNT%/g, num_education));
 
-			//Typeahed code for the School field
-			$('.school').autocomplete({ source: 'school.php'});
+				//Typeahed code for the School field
+				$('.school').autocomplete({ source: 'school.php'});
 
 			});
 		});
@@ -183,7 +182,7 @@
 		<div id="school_%COUNT%"> 
 			 <p>Year: <input type="text" name="edu_year_%COUNT%" value="">
 			 	<input type="button" name="rem_edu" value="-" 
-			 		   onclick="$('#school_%COUNT%').remove(); return false;"><br />
+			 		   onclick="$('#school_%COUNT%').remove(); num_education--; return false;"><br />
 			 	<label for ="txt_sch_%COUNT%">School:</label>   
 			 	<input type="text" size=80 name="school_%COUNT%" class="school" value="" id="txt_sch_%COUNT%">
 			 </p>

@@ -6,6 +6,7 @@
 	} else if ( exists_in_db($pdo, "profile_id", "Profile", $_GET["profile_id"])) {
 		$profile_id = $_GET["profile_id"];
 
+		// Output the basic user info
 		$sql = "SELECT first_name, last_name, email, headline, summary
 				FROM profile
 				WHERE profile_id=?"; 
@@ -16,15 +17,28 @@
 		$profile = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
-		$sql = "SELECT * FROM position WHERE profile_id=? ORDER BY year DESC";
+		// Output the positions / experience
+		// Currently returns a single row; improvement could be to return the 
+		// Full array.
+		/* $sql = "SELECT * FROM position WHERE profile_id=? ORDER BY year DESC";
 		$stmt = $pdo->prepare($sql);
 		$stmt->bindValue(1, $profile_id);
 		$stmt->execute();
-		$position = $stmt->fetch(PDO::FETCH_ASSOC);
+		$position = $stmt->fetch(PDO::FETCH_ASSOC); */
 
 	} else {
 		err_redir(ERR_NO_PROFILE, "index.php");
 	}
+
+function get_position($pdo, $profile_id) {
+
+		$sql = "SELECT * FROM position WHERE profile_id=? ORDER BY year DESC";
+		$stmt = $pdo->prepare($sql);
+		$stmt->bindValue(1, $profile_id);
+		$stmt->execute();
+
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
 ?>
 
@@ -46,16 +60,27 @@
 			print "<p>$title: $value</<p>";
 		}
 
-		if ( $position )  {
+		print "<hr>";
+		
+		if ( $position = get_position($pdo, $profile_id) ) {
+			print "<h3>Positions</h3>";
+		}
+
+		for ($i=0; $i < sizeof($position); $i++) {
+			echo '<li>' . $position[$i]['year'] . ': ';
+			echo $position[$i]['description'] . '</li>';
+		}
+		
+		/*foreach ($position as $key => $value ) {
 			print "<h3>Position</h3>\n<ul>";
 			do {
 				$year = htmlentities($position["year"]);
 				$desc = htmlentities($position["description"]);
 				print "<li>" . $year . ": " . $desc . "</li>";				
-			} while ( $position = $stmt->fetch(PDO::FETCH_ASSOC) );
+			} while ( $position );
 		}
 
-			print "</ul>";
+			print "</ul>"; */
 	?>
 	<p><a href="index.php">Done</a></p>
 
