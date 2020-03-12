@@ -69,7 +69,8 @@ function get_education($pdo, $profile_id) {
 		}
 
 		print "<hr>";
-		
+		// These two sections can be cleaned up and and modelled into a general
+		// case / function.
 		if ( $position = get_position($pdo, $profile_id) ) {
 			print "<h3>Positions</h3><ul>";
 		}
@@ -80,7 +81,7 @@ function get_education($pdo, $profile_id) {
 		}
 
 		if ( $education = get_education($pdo, $profile_id) ) {
-			print "</ul><h3>Education / Schools</h3></ul>";
+			print "</ul><h3>Education / Schools</h3><ul>";
 		}
 
 		for ($i=0; $i < sizeof($education); $i++) {

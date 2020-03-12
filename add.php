@@ -139,17 +139,10 @@
 					return;
 				}
 
-				$('#position_fields').append(
-					'<div id="position' + num_positions + '"> \
-					<h3>Position: ' + num_positions + '</h3> \
-					 <p>Year: <input type="text" \
-					 				 name="year[' + num_positions + ']" \
-					 				 value="" /> \
-					 <input type="button" name="rem_pos" value="-" \
-					 	onclick="$(\'#position' + num_positions + '\').remove(); num_positions--; return false;"></p> \
-					 <textarea name="desc[' + num_positions + ']" rows="8" cols="80"></textarea> \
-					 <input type="hidden" name="position[' + num_positions + ']" value="' + num_positions + '"> \
-					 </div>');				
+				var source_pos = $('#pos-template').html();
+
+				$('#position_fields').append(source_pos.replace(/%COUNT%/g, num_positions));
+		
 			});
 
 			// Addd educaiton / school to the page
@@ -167,9 +160,8 @@
 				var source_edu = $('#edu-template').html();
 				
 				$('#education_fields').append(source_edu.replace(/%COUNT%/g, num_education));
-				console.log(source_edu.replace(/%COUNT%/g, num_education));
 
-				//Typeahed code for the School field
+				// Typeahed code for the School field
 				$('.school').autocomplete({ source: 'school.php'});
 
 			});
@@ -178,13 +170,28 @@
 	<?php include("inc/footer.php");?>
 
 	<!-- TEMPLATE USES %COUNT% FOR VARIABLE-->
-	<script id="edu-template" type="text">
+
+	<!-- School / Education -->
+	<script id="edu-template" type="text/html">
 		<div id="school_%COUNT%"> 
 			 <p>Year: <input type="text" name="edu_year_%COUNT%" value="">
 			 	<input type="button" name="rem_edu" value="-" 
 			 		   onclick="$('#school_%COUNT%').remove(); num_education--; return false;"><br />
 			 	<label for ="txt_sch_%COUNT%">School:</label>   
 			 	<input type="text" size=80 name="school_%COUNT%" class="school" value="" id="txt_sch_%COUNT%">
+			 </p>
+		 </div>
+	</script>
+
+	<!-- Position -->
+	<script id="pos-template" type="text/html">
+			<div id="position_%COUNT%"> 
+				<p>Year: <input type="text" name="pos_year[%COUNT%]" value="">
+			 		<input type="button" name="rem_pos" value="-" 
+			 		   onclick="$('#position_%COUNT%').remove(); num_positions--; return false;"><br />
+			 	<label for="pos_desc_%COUNT%">Description:</label>   
+			 	<textarea name="pos_desc[%COUNT%]" rows="8" cols="80" id="pos_desc_%COUNT%"></textarea>
+			 	<input type="hidden" name="position[%COUNT%]" value="%COUNT%">
 			 </p>
 		 </div>
 	</script>

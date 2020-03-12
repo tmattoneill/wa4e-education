@@ -132,18 +132,18 @@
 
 	function validate_position() {
   		for($i=1; $i<=9; $i++) {
-		    if ( ! isset($_POST['year'][$i]) ) continue;
-		    if ( ! isset($_POST['desc'][$i]) ) continue;
+		    if ( ! isset($_POST['pos_year'][$i]) ) continue;
+		    if ( ! isset($_POST['pos_desc'][$i]) ) continue;
 
-		    $year = $_POST['year'][$i];
-		    $desc = $_POST['desc'][$i];
+		    $year = $_POST['pos_year'][$i];
+		    $desc = $_POST['pos_desc'][$i];
 
 		    if ( strlen($year) == 0 || strlen($desc) == 0 ) {
 		      return "All fields are required";
 	    }
 
 	    if ( ! is_numeric($year) ) {
-	      return "Position year must be numeric";
+	      return "Year must be numeric(e.g. 1998)";
 	    }
 	  }
 	  return true;

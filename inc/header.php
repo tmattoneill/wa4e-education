@@ -1,16 +1,26 @@
 	<title>Matt O'Neill Education Manager</title>
 
-    <meta charset="utf-8">
-    <meta name="viewport" 
-    	  content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta charset="utf-8">
+	<meta name="viewport" 
+		  content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" 
-    	  href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
-    	  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
-    	  crossorigin="anonymous">
+	<link rel="stylesheet" 
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" 
+          crossorigin="anonymous">
 
-    <!-- JQuery -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" 
-    	    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" 
-    	    crossorigin="anonymous"></script>
+	<link rel="stylesheet" 
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" 
+          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
+          crossorigin="anonymous">
+
+	<link rel="stylesheet" 
+          href="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css"> 
+
+	<script src="https://code.jquery.com/jquery-3.2.1.js" 
+            integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" 
+            crossorigin="anonymous"></script>
+
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" 
+            integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" 
+            crossorigin="anonymous"></script>
