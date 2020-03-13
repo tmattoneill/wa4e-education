@@ -1,5 +1,9 @@
 <?php
 
+	require_once("inc/config.php");
+
+	require_login();
+
 	header('Content-Type: application/json; charset=utf-8');
 
 	$stmt = $pdo->prepare('SELECT name FROM Institution WHERE name LIKE :prefix');

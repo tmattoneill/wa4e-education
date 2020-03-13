@@ -17,9 +17,9 @@
 				err_redir(ERR_EMPTY_FIELDS, "add.php");
 			}
 
-			if ( strpos($key, "year") && (! is_numeric($_POST[$key])) ) {
-				err_redir(ERR_NUMERIC_ONLY, "add.php");
-			}
+			/*if ( strpos($key, "year") && (! is_numeric($_POST[$key])) ) {
+				err_redir($key . ": " . ERR_NUMERIC_ONLY . " Was: '" . var_dump($value) . "'", "add.php");
+			}*/
 		}
 
 		if (! is_bool($err = validate_position()) ) {
@@ -160,6 +160,8 @@
 				var source_edu = $('#edu-template').html();
 				
 				$('#education_fields').append(source_edu.replace(/%COUNT%/g, num_education));
+				console.log(num_education);
+				console.log(source_edu.replace(/%COUNT%/g, num_education));
 
 				// Typeahed code for the School field
 				$('.school').autocomplete({ source: 'school.php'});
@@ -170,15 +172,15 @@
 	<?php include("inc/footer.php");?>
 
 	<!-- TEMPLATE USES %COUNT% FOR VARIABLE-->
-
 	<!-- School / Education -->
 	<script id="edu-template" type="text/html">
 		<div id="school_%COUNT%"> 
-			 <p>Year: <input type="text" name="edu_year_%COUNT%" value="">
+			 <p>Year: <input type="text" name="edu_year[%COUNT%]" value="">
 			 	<input type="button" name="rem_edu" value="-" 
 			 		   onclick="$('#school_%COUNT%').remove(); num_education--; return false;"><br />
 			 	<label for ="txt_sch_%COUNT%">School:</label>   
-			 	<input type="text" size=80 name="school_%COUNT%" class="school" value="" id="txt_sch_%COUNT%">
+			 	<input type="text" size=80 name="edu_school[%COUNT%]" class="school" value="" id="txt_sch_%COUNT%">
+			 	<input type="hidden" name="school[%COUNT%]" value="%COUNT%">
 			 </p>
 		 </div>
 	</script>
