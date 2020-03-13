@@ -62,16 +62,37 @@
     	}
 
     	// Add Education if entered
+
+    	// check in there are school(s) entered in the Add form and confirm it is
+    	// passed as an array of one or more schools.
     	if (! empty($_POST['school']) && is_array($_POST['school'])) {
 
+    		// loop through each of the schools in the array 
     		foreach ( $_POST['school'] as $edu => $rank) {
 
+    			// store this entry's year and school in simple variables
     			$year = $_POST['edu_year'][$edu];
     			$school = $_POST['edu_school'][$edu];
 
     			$institution_id = false;
-    			$stmt = $pdo->prepare('SELECT institution_id from Institution where name = :name');
+
+    			// does the institution exist? If not, add it
+				$stmt = $pdo->prepare('SELECT institution_id from Institution where name =:name');
     			$stmt->execute(array(':name' => $school));
+    			$row = $stmt->fetch(PDO::FETCH_ASSOC);
+    			$institution_id = $row ? $row["institution_id"] : false;
+
+    			if (! $institution_id ) {
+    				$stmt = $pdo->prepare('INSERT INTO Institution (name) VALUES ( :name) ');
+    				$stmt->execute(array(':name' => $school));
+    				$institution_id = $pdo->lastInsertId();
+    			}
+
+    			if (! $institution_id ) {
+    				$_SESSION["error"] = "Error adding or finding that school.";
+    				header("Location: add.php");
+    				exit();
+    			}
 
 	    		$stmt = $pdo->prepare('INSERT INTO Education (profile_id, ranking, year, institution_id) VALUES ( :pid, :rank, :year, :institution_id)');
 

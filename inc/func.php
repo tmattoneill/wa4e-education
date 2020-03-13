@@ -64,8 +64,8 @@
 	function get_user ($pdo) {
 
 	    $stmt = $pdo->prepare("SELECT user_id, name, email
-						   FROM users
-						   WHERE email = :em");
+							   FROM users
+						       WHERE email = :em");
 	    
 	    $stmt->execute(array(':em' => $_POST['email']));
 	    
