@@ -100,7 +100,7 @@
 				  ':pid' => $profile_id,
 				  ':rank' => $rank,
 				  ':year' => $year,
-				  ':institution_id' => $school)
+				  ':institution_id' => $institution_id)
 				);
     		}
     	}
