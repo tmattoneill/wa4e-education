@@ -42,8 +42,10 @@
 	        ':su' => $_POST['summary'])
     	);
 
+
     	$profile_id = $pdo->lastInsertId();
 
+    	// Add the positions if entered
     	if (! empty($_POST['position']) && is_array($_POST['position'])) {
 
     		foreach ( $_POST['position'] as $pos => $rank) {
@@ -53,13 +55,36 @@
 				$stmt->execute(array(
 				  ':pid' => $profile_id,
 				  ':rank' => $rank,
-				  ':year' => $_POST['year'][$pos],
-				  ':desc' => $_POST['desc'][$pos])
+				  ':year' => $_POST['pos_year'][$pos],
+				  ':desc' => $_POST['pos_desc'][$pos])
 				);
     		}
     	}
 
-    	$_SESSION["success"] = "Record added. Profile ID: $profile_id";
+    	// Add Education if entered
+    	if (! empty($_POST['school']) && is_array($_POST['school'])) {
+
+    		foreach ( $_POST['school'] as $edu => $rank) {
+
+    			$year = $_POST['edu_year'][$edu];
+    			$school = $_POST['edu_school'][$edu];
+
+    			$institution_id = false;
+    			$stmt = $pdo->prepare('SELECT institution_id from Institution where name = :name');
+    			$stmt->execute(array(':name' => $school));
+
+	    		$stmt = $pdo->prepare('INSERT INTO Education (profile_id, ranking, year, institution_id) VALUES ( :pid, :rank, :year, :institution_id)');
+
+				$stmt->execute(array(
+				  ':pid' => $profile_id,
+				  ':rank' => $rank,
+				  ':year' => $year,
+				  ':institution_id' => $school)
+				);
+    		}
+    	}
+
+		$_SESSION["success"] = "Record added. Profile ID: $profile_id";
     	header("Location: index.php");
     	exit;
 
