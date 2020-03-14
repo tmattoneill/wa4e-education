@@ -1,125 +1,20 @@
 <?php
 
 	require_once("inc/config.php");
-
-	require_login();
-
-	if ( isset($_POST["cancel"])) {
-		header("Location: index.php");
-		exit;
-	}
-
-	if ( isset($_POST["add"]) ) {          // Coming from form
-	// FORM VALIDATION
-		foreach ($_POST as $key => $value) {  // Check all fields for empty strings
-			
-			if ( is_array($value)) {
-				for ($i=0; $i < count($value); $i++) {
-
-					if ($value[$i] == "") {
-						err_redir( $key . ": " . ERR_EMPTY_FIELDS, "add.php");
-					}
-
-					if ( strpos($key, "year") && (! is_numeric($value[$i])) ) {
-						err_redir( $key . ": " . ERR_NUMERIC_ONLY, "add.php");
-					}
+	$retval = array();
+	echo '<pre>' . var_export($_POST, true) . '</pre>';
+	if (isset($_POST["add"])) {
+		foreach ($_POST as $k => $v)
+			if ( is_array($v) ) {
+				for ($i=0; $i < count($v); $i++) {
+					print "<p>$k => $v[$i]</p>";
 				}
 			} else {
-				if ($value == "") {
-					err_redir( $key . ": " . ERR_EMPTY_FIELDS, "add.php");
-				}
-			}
-		}
-	
-		if (! is_bool($err = validate_position()) ) {
-			err_redir($err, "add.php");
-		}
-
-		if (! strrpos($_POST["email"], "@") ) { // Check for @ in email address
-			err_redir(ERR_EMAIL, "add.php");
-		}
-	// FORM VALIDATED CONTINUE
-
-		$stmt = $pdo->prepare('INSERT INTO Profile (user_id, first_name, last_name, email, headline, summary)
-        					   VALUES ( :uid, :fn, :ln, :em, :he, :su)');
-    	$stmt->execute(array(
-	        ':uid' => $_SESSION['user_id'],
-	        ':fn' => $_POST['first_name'],
-	        ':ln' => $_POST['last_name'],
-	        ':em' => $_POST['email'],
-	        ':he' => $_POST['headline'],
-	        ':su' => $_POST['summary'])
-    	);
-
-
-    	$profile_id = $pdo->lastInsertId();
-
-    	// Add the positions if entered
-    	if (! empty($_POST['position']) && is_array($_POST['position'])) {
-
-    		foreach ( $_POST['position'] as $pos => $rank) {
-
-	    		$stmt = $pdo->prepare('INSERT INTO Position (profile_id, ranking, year, description) VALUES ( :pid, :rank, :year, :desc)');
-
-				$stmt->execute(array(
-				  ':pid' => $profile_id,
-				  ':rank' => $rank,
-				  ':year' => $_POST['pos_year'][$pos],
-				  ':desc' => $_POST['pos_desc'][$pos])
-				);
-    		}
-    	}
-
-    	// Add Education if entered
-
-    	// check in there are school(s) entered in the Add form and confirm it is
-    	// passed as an array of one or more schools.
-    	if (! empty($_POST['school']) && is_array($_POST['school'])) {
-
-    		// loop through each of the schools in the array 
-    		foreach ( $_POST['school'] as $edu => $rank) {
-
-    			// store this entry's year and school in simple variables
-    			$year = $_POST['edu_year'][$edu];
-    			$school = $_POST['edu_school'][$edu];
-
-    			$institution_id = false;
-
-    			// does the institution exist? If not, add it
-				$stmt = $pdo->prepare('SELECT institution_id from Institution where name =:name');
-    			$stmt->execute(array(':name' => $school));
-    			$row = $stmt->fetch(PDO::FETCH_ASSOC);
-    			$institution_id = $row ? $row["institution_id"] : false;
-
-    			if (! $institution_id ) {
-    				$stmt = $pdo->prepare('INSERT INTO Institution (name) VALUES ( :name) ');
-    				$stmt->execute(array(':name' => $school));
-    				$institution_id = $pdo->lastInsertId();
-    			}
-
-    			if (! $institution_id ) {
-    				$_SESSION["error"] = "Error adding or finding that school.";
-    				header("Location: add.php");
-    				exit();
-    			}
-
-	    		$stmt = $pdo->prepare('INSERT INTO Education (profile_id, ranking, year, institution_id) VALUES ( :pid, :rank, :year, :institution_id)');
-
-				$stmt->execute(array(
-				  ':pid' => $profile_id,
-				  ':rank' => $rank,
-				  ':year' => $year,
-				  ':institution_id' => $institution_id)
-				);
-    		}
-    	}
-
-		$_SESSION["success"] = "Record added. Profile ID: $profile_id";
-    	header("Location: index.php");
-    	exit;
-
+				print "<p>$k => $v</p>";
+			}	
 	}
-// TODO: @tomorrow add cleanup
+
+
 
 ?>
 
@@ -138,7 +33,7 @@
 	<?php flash_msg(); ?>
 
 	<!-- User Form -->
-	<form name="add_user" method="post" action="add.php">
+	<form name="add_user" method="post" action="test_add.php">
 		<div class="form-group">
 			<label for="txt_fname">First Name</label>
 			<input type="text" name="first_name" id="txt_fname" class="form-control">
@@ -153,8 +48,7 @@
 			<input type="text" name="headline" id="txt_head" class="form-control"><br>
 
 			<label for="txt_fname">Summary</label>
-			<textarea name="summary" id="txta_summary" rows="10" class="form-control">				
-			</textarea>
+			<textarea name="summary" id="txta_summary" rows="10" class="form-control"></textarea>
 			<hr>
 
 			<!-- Education Management -->
@@ -189,21 +83,20 @@
 
 			// Add in a position to the page
 			$('#add_position').click( function(event) {
-
+				console.log("Adding " + num_positions);
 				event.preventDefault();
-
-				
 
 				if ( num_positions >= 9 ) {
 					alert("Maximum of nine position entries exceeded.");
 					return;
 				}
+				
 
 				var source_pos = $('#pos-template').html();
 
 				$('#position_fields').append(source_pos.replace(/%COUNT%/g, num_positions));
 				num_positions++;
-
+		
 			});
 
 			// Addd educaiton / school to the page
@@ -211,18 +104,20 @@
 
 				event.preventDefault();
 
-				
+								
 				
 				if ( num_education >= 9 ) {
 					alert("Maximum of nine schools exceeded.");
 					return;
 				}
 
+
+				
 				var source_edu = $('#edu-template').html();
 				
 				$('#education_fields').append(source_edu.replace(/%COUNT%/g, num_education));
 				console.log(num_education);
-				console.log(source_edu.replace(/%COUNT%/g, num_education));
+				//console.log(source_edu.replace(/%COUNT%/g, num_education));
 
 				// Typeahed code for the School field
 				$('.school').autocomplete({ source: 'school.php'});
