@@ -26,7 +26,7 @@
 	function profile_table($profiles) {
 	    // take a PDO object and return a string that generates a table in html
 	    // gets all rows and fields
-	    $table = "<table border=1>\n<tbody>";
+	    $table = "<table class='table-striped'>\n<tbody>";
 	    $table .= "<thead><tr><th>Name</th><th>Headline</th><th>Action</th></thead>";
 	    
 	    while ( $row = $profiles->fetch() ) {
