@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="wa4e-education">
+    <serverData>
+      <paths name="wa4e-education">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="wa4e-education" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

@@ -26,7 +26,7 @@
 	function profile_table($profiles) {
 	    // take a PDO object and return a string that generates a table in html
 	    // gets all rows and fields
-	    $table = "<table border=1>\n<tbody>";
+	    $table = "<table class='table-striped'>\n<tbody>";
 	    $table .= "<thead><tr><th>Name</th><th>Headline</th><th>Action</th></thead>";
 	    
 	    while ( $row = $profiles->fetch() ) {
@@ -61,12 +61,11 @@
 	    
 	}
 	
-	function get_user () {
-	    global $pdo;
-	    
+	function get_user ($pdo) {
+
 	    $stmt = $pdo->prepare("SELECT user_id, name, email
-						   FROM users
-						   WHERE email = :em");
+							   FROM users
+						       WHERE email = :em");
 	    
 	    $stmt->execute(array(':em' => $_POST['email']));
 	    
@@ -99,6 +98,60 @@
 	    return $password_ok;
 	    
 	}
+
+	function flash_msg() {
+
+		if ( isset($_SESSION["error"]) ) {
+			echo "<p class='alert alert-warning'>";
+			echo $_SESSION["error"] . "</p>";
+			unset($_SESSION["error"]);
+		
+		} else if ( isset($_SESSION["success"]) ) {
+			echo "<p class='alert alert-success'>";
+			echo $_SESSION["success"] . "</p>";
+			unset($_SESSION["success"]);
+
+		} 
+	}
+
+	function require_login($msg=null, $dest=null) {
+
+		if (! isset($_SESSION["user_id"])) {  // Not logged in
+			if ( isset($dest)) {
+				err_redir($msg, $dest);
+			} else
+				die(ERR_NO_ACCESS);
+		}
+	}
+
+	function err_redir($msg, $dest) {
+		$_SESSION["error"] = $msg;
+		header("Location: $dest");
+		exit();
+	}
+
+	function validate_position() {
+  		for($i=1; $i<=9; $i++) {
+		    if ( ! isset($_POST['pos_year'][$i]) ) continue;
+		    if ( ! isset($_POST['pos_desc'][$i]) ) continue;
+
+		    $year = $_POST['pos_year'][$i];
+		    $desc = $_POST['pos_desc'][$i];
+
+		    if ( strlen($year) == 0 || strlen($desc) == 0 ) {
+		      return "All fields are required";
+	    }
+
+	    if ( ! is_numeric($year) ) {
+	      return "Year must be numeric(e.g. 1998)";
+	    }
+	  }
+	  return true;
+	}
+
+	function alert_out($str) {
+		print "<script>alert(\"" . var_dump($str). "\")</script>";
+  }
 
 	function field_name_to_text($title) {
 		// takes a mysql field name (column) and returns a friendly

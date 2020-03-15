@@ -29,6 +29,7 @@ function doValidate() {
 	return false; // function
 }
 
+// TODO: Education
 
 function validateEmail(em) {
 
@@ -42,7 +43,6 @@ function validateEmail(em) {
 
 }
 
-
 function validateYear(year) {
 
 	if ( ! isNaN(year)) {
@@ -53,7 +53,6 @@ function validateYear(year) {
 	}
 }
 
-
 function validateAdd(arrTagNames) {
 	// arrTagName is an array of one or more form tag names to validate against
 	console.log("Validating form...");
@@ -62,6 +61,9 @@ function validateAdd(arrTagNames) {
 		var fields = document.getElementsByTagName(tag);
 
 		for (const field of fields) {
+			var checking = field.getAttribute("name") + ": " + field.value;
+			alert(checking);
+			
 			// Check that all fields are completed
 			if ( field.value == "" ) {
 				console.log("Error: ".field.value);
