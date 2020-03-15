@@ -151,6 +151,18 @@
 
 	function alert_out($str) {
 		print "<script>alert(\"" . var_dump($str). "\")</script>";
+  }
+
+	function field_name_to_text($title) {
+		// takes a mysql field name (column) and returns a friendly
+		// string for use as a label or column head
+		// Heuristics:
+		//   - replace "_" with " "
+		//   - use Title Case
+		// $title: string value
+		$title = str_replace("_", " ", $title);
+		$title = ucwords($title);
+
 	}
 	
 ?>

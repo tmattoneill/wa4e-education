@@ -1,0 +1,42 @@
+bootstrap_files = {
+	"bootstrap-css" : [
+		"ver": "4.4.1",
+		"type": "text/css",
+		"rel": "stylesheet",
+		"path": "/bootstrap/",
+		"file": "bootstrap.min.css",
+		"cdn": "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+		],
+	"bootstrap-min-js" : [
+		"ver": "4.4.1",
+		"type": "script/javascript",
+		"rel": "",
+		"path": "",
+		"file": "",
+		"cdn" : "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+	],
+	"bootstrap-bundle-js" : [
+		"ver": "4.4.1",
+		"type": "script/javascript",
+		"rel": "",
+		"path": "",
+		"file": "",
+		"cdn": "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"
+	],
+	"bootstrap-jquery-js" : [
+		"ver": "3.3.1",
+		"type": "script/javascript",
+		"rel": "",
+		"path": "",
+		"file": "",
+		"cdn": "https://code.jquery.com/jquery-3.3.1.slim.min.js"
+	],
+	"popper-js" : [
+		"ver": "1.14.7",
+		"type": "script/javascript",
+		"rel": "",
+		"path": "",
+		"file": "",
+		"cdn": "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+	]
+}
