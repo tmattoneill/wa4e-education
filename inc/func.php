@@ -164,5 +164,52 @@
 		$title = ucwords($title);
 
 	}
+
+	function insert_positions($pdo, $profile_id) {
+		$rank = 1;
+	    for($i=1; $i<=9; $i++) {
+	        if ( ! isset($_POST['year'][$i]) ) continue;
+	        if ( ! isset($_POST['desc'][$i]) ) continue;
+
+	        $year = $_POST['year'][$i];
+	        $desc = $_POST['desc'][$i];
+
+	        $stmt = $pdo->prepare('INSERT INTO Position (profile_id, ranking, year, description)
+	        					   VALUES ( :pid, :rank, :year, :desc)');
+	        $stmt->execute(array(
+	            ':pid' => $_REQUEST['profile_id'],
+	            ':rank' => $rank,
+	            ':year' => $year,
+	            ':desc' => $desc)
+	        );
+	        $rank++;
+	    }
+	}
+
+		function insert_educations($pdo, $profile_id) {
+		$rank = 1;
+	    for($i=1; $i<=9; $i++) {
+	        if ( ! isset($_POST['year'][$i]) ) continue;
+	        if ( ! isset($_POST['desc'][$i]) ) continue;
+
+	        $year = $_POST['year'][$i];
+	        $desc = $_POST['desc'][$i];
+
+	        // check if instituation name is in the Insitution table
+	        // if it is, add that insitition_id into the education table
+	        // else add a new record to the Insitution table, save the last 
+	        // inserted ID and save that to the Education table.
+
+	        $stmt = $pdo->prepare('INSERT INTO Education (profile_id, ranking, year, institution_id)
+	        					   VALUES ( :pid, :rank, :year, :institution_id)');
+	        $stmt->execute(array(
+	            ':pid' => $_REQUEST['profile_id'],
+	            ':rank' => $rank,
+	            ':year' => $year,
+	            ':institution_id' => $institution_id)
+	        );
+	        $rank++;
+	    }
+	}
 	
 ?>

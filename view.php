@@ -3,7 +3,9 @@
 
 	if (! isset($_GET["profile_id"])) {
 		err_redir(ERR_NO_PROFILE_ID, "index.php");
-	} else if ( exists_in_db($pdo, "profile_id", "Profile", $_GET["profile_id"])) {
+	}
+
+	if ( exists_in_db($pdo, "profile_id", "Profile", $_GET["profile_id"])) {
 		$profile_id = $_GET["profile_id"];
 
 		// Output the basic user info
@@ -37,10 +39,11 @@ function get_position($pdo, $profile_id) {
 
 function get_education($pdo, $profile_id) {
 	$sql = "SELECT Institution.name, Education.year 
-			from Profile 
-				join Education on Profile.profile_id = Education.profile_id
-				join Institution on Education.institution_id = Institution.institution_id 
-			where Profile.profile_id=?";
+			FROM Profile 
+			JOIN Education ON Profile.profile_id = Education.profile_id
+			JOIN Institution ON Education.institution_id = Institution.institution_id
+			WHERE Profile.profile_id=?";
+
 	$stmt = $pdo->prepare($sql);
 	$stmt->bindValue(1, $profile_id);
 	$stmt->execute();
@@ -61,6 +64,7 @@ function get_education($pdo, $profile_id) {
 <div class="container" id="main-content">
 	<div class="row">
 		<h1>Profile for: <?= $profile["first_name"] ?></h1>
+		<?php flash_msg(); ?>
 	</div>
 	<?php
 		foreach ($profile as $key => $value) {
@@ -89,10 +93,12 @@ function get_education($pdo, $profile_id) {
 		for ($i=0; $i < sizeof($position); $i++) {
 			echo "<div class='row'>
 					<div class='col-sm-1'>
-						<span class='pull-right glyphicon glyphicon-chevron-right'></span>
+						<span class='pull-right 
+									 glyphicon glyphicon-chevron-right'></span>
 					</div>
 					<div class='col-sm-11'>" . 
-			      		$position[$i]['year'] . ": " . $position[$i]['description'] . 
+			      		$position[$i]['year'] . ": " . 
+			      		$position[$i]['description'] . 
 			      	"</div>
 			      </div>";
 		}
@@ -107,10 +113,12 @@ function get_education($pdo, $profile_id) {
 		for ($i=0; $i < sizeof($education); $i++) {
 			echo "<div class='row'>
 				    <div class='col-sm-1'>
-					  <span class='pull-right glyphicon glyphicon-chevron-right'></span>
+					  <span class='pull-right 
+					  			   glyphicon glyphicon-chevron-right'></span>
 					</div>
 					<div class='col-sm-11'>" .
-				      $education[$i]['year'] . ': ' . $education[$i]['name'] . 
+				      $education[$i]['year'] . ': ' . 
+				      $education[$i]['name'] . 
 				   "</div>
 				  </div>";
 		}
