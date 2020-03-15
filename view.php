@@ -116,7 +116,7 @@ function get_education($pdo, $profile_id) {
 		}
 		
 	?>
-	<div class="row"><h3><a href="index.php">Done</a></h3></div>
+	<div class="row"><h4><a href="index.php">Done</a></h3></div>
 
 </div>
 

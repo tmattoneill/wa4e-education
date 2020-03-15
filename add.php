@@ -159,31 +159,46 @@
 	<!-- User Form -->
 	<form name="add_user" method="post" action="add.php">
 		<div class="form-group">
+			<!-- Basic information -->
 			<label for="txt_fname">First Name</label>
-			<input type="text" name="first_name" id="txt_fname" class="form-control">
+			<input type="text" name="first_name" 
+				   id="txt_fname" class="form-control">
 
 			<label for="txt_lname">Last Name</label>
-			<input type="text" name="last_name" id="lname" class="form-control"><br>
+			<input type="text" name="last_name" 
+				   id="lname" class="form-control"><br>
 			
 			<label for="txt_email">Email</label>
-			<input type="text" name="email" id="txt_email" class="form-control"><br>
+			<input type="text" name="email" 
+				   id="txt_email" class="form-control"><br>
 
 			<label for="txt_headline">Headline</label>
-			<input type="text" name="headline" id="txt_head" class="form-control"><br>
+			<input type="text" name="headline" 
+				   id="txt_head" class="form-control"><br>
 
 			<label for="txt_fname">Summary</label>
-			<textarea name="summary" id="txta_summary" rows="10" class="form-control">				
-			</textarea>
+			<textarea name="summary" 
+					  id="txta_summary" 
+					  rows="10" class="form-control"></textarea>
+
 			<hr>
 
 			<!-- Education Management -->
-			<p>Education / School <input type="submit" id="add_education" name="add_sch" value="+"></p>
+			<p>Education / School <input type="submit" 
+										 id="add_education" 
+										 name="add_sch" 
+										 value="+"></p>
+
 			<div id="education_fields">
 			</div>
 			<!-- End Education Management -->
 
 			<!-- Position Management -->
-			<p>Position <input type="submit" id="add_position" name="add_pos" value="+"></p>
+			<p>Position <input type="submit" 
+							   id="add_position" 
+							   name="add_pos" 
+							   value="+"></p>
+
 			<div id="position_fields">
 			</div>
 			<!-- End Position Management -->

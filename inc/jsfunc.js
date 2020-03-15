@@ -61,6 +61,9 @@ function validateAdd(arrTagNames) {
 		var fields = document.getElementsByTagName(tag);
 
 		for (const field of fields) {
+			var checking = field.getAttribute("name") + ": " + field.value;
+			alert(checking);
+			
 			// Check that all fields are completed
 			if ( field.value == "" ) {
 				console.log("Error: ".field.value);
