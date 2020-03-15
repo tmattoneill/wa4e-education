@@ -68,7 +68,7 @@ function get_education($pdo, $profile_id) {
 			$title = ucwords($title);
 			$value = htmlentities($value);
 
-			print "<div class='row'<p>$title: $value</<p></div>";
+			print "<div class='row'><p>$title: $value</<p></div>";
 		}
 
 		print "<hr>";

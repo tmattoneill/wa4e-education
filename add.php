@@ -1,17 +1,16 @@
 <?php
 
 	require_once("inc/config.php");
-
 	require_login();
 
 	if ( isset($_POST["cancel"])) {
 		header("Location: index.php");
-		exit;
+		exit();
 	}
 
-	if ( isset($_POST["add"]) ) {          // Coming from form
-	// FORM VALIDATION
-		foreach ($_POST as $key => $value) {  // Check all fields for empty strings
+	if ( isset($_POST["add"]) ) {          	  
+		// FORM VALIDATION
+		foreach ($_POST as $key => $value) {  
 			
 			if ( is_array($value)) {
 				for ($i=0; $i < count($value); $i++) {
@@ -35,12 +34,18 @@
 			err_redir($err, "add.php");
 		}
 
-		if (! strrpos($_POST["email"], "@") ) { // Check for @ in email address
+		if (! strrpos($_POST["email"], "@") ) { 
 			err_redir(ERR_EMAIL, "add.php");
 		}
-	// FORM VALIDATED CONTINUE
+		// END FORM VALIDATION
 
-		$stmt = $pdo->prepare('INSERT INTO Profile (user_id, first_name, last_name, email, headline, summary)
+		$stmt = $pdo->prepare('INSERT INTO Profile (user_id, 
+												    first_name, 
+												    last_name, 
+												    email, 
+												    headline, 
+												    summary)
+
         					   VALUES ( :uid, :fn, :ln, :em, :he, :su)');
     	$stmt->execute(array(
 	        ':uid' => $_SESSION['user_id'],
@@ -59,7 +64,11 @@
 
     		foreach ( $_POST['position'] as $pos => $rank) {
 
-	    		$stmt = $pdo->prepare('INSERT INTO Position (profile_id, ranking, year, description) VALUES ( :pid, :rank, :year, :desc)');
+	    		$stmt = $pdo->prepare('INSERT INTO Position (profile_id, 
+	    													 ranking, 
+	    													 year, 
+	    													 description) 
+	    							   VALUES ( :pid, :rank, :year, :desc)');
 
 				$stmt->execute(array(
 				  ':pid' => $profile_id,
@@ -72,8 +81,8 @@
 
     	// Add Education if entered
 
-    	// check in there are school(s) entered in the Add form and confirm it is
-    	// passed as an array of one or more schools.
+    	// check if there are school(s) entered in the Add form and confirm it
+    	// is passed as an array of one or more schools.
     	if (! empty($_POST['school']) && is_array($_POST['school'])) {
 
     		// loop through each of the schools in the array 
@@ -86,13 +95,18 @@
     			$institution_id = false;
 
     			// does the institution exist? If not, add it
-				$stmt = $pdo->prepare('SELECT institution_id from Institution where name =:name');
+				$stmt = $pdo->prepare('SELECT institution_id 
+									   FROM Institution 
+									   WHERE name =:name');
+
     			$stmt->execute(array(':name' => $school));
     			$row = $stmt->fetch(PDO::FETCH_ASSOC);
     			$institution_id = $row ? $row["institution_id"] : false;
 
     			if (! $institution_id ) {
-    				$stmt = $pdo->prepare('INSERT INTO Institution (name) VALUES ( :name) ');
+    				$stmt = $pdo->prepare('INSERT INTO Institution (name) 
+    									   VALUES ( :name) ');
+
     				$stmt->execute(array(':name' => $school));
     				$institution_id = $pdo->lastInsertId();
     			}
@@ -103,7 +117,13 @@
     				exit();
     			}
 
-	    		$stmt = $pdo->prepare('INSERT INTO Education (profile_id, ranking, year, institution_id) VALUES ( :pid, :rank, :year, :institution_id)');
+	    		$stmt = $pdo->prepare('INSERT INTO Education (profile_id, 
+	    													  ranking, year, 
+	    													  institution_id) 
+	    							   VALUES ( :pid, 
+	    							   			:rank, 
+	    							   			:year, 
+	    							   			:institution_id)');
 
 				$stmt->execute(array(
 				  ':pid' => $profile_id,
@@ -116,10 +136,9 @@
 
 		$_SESSION["success"] = "Record added. Profile ID: $profile_id";
     	header("Location: index.php");
-    	exit;
+    	exit();
 
 	}
-// TODO: @tomorrow add cleanup
 
 ?>
 
