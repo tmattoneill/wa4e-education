@@ -50,6 +50,8 @@ function get_education($pdo, $profile_id) {
 
 ?>
 
+<!-- ================================ HTML ================================ -->
+
 <!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -57,42 +59,46 @@ function get_education($pdo, $profile_id) {
 </head>
 <body>
 <div class="container" id="main-content">
-
-	<h1>Profile for: <?= $profile["first_name"] ?></h1>
+	<div class="row">
+		<h1>Profile for: <?= $profile["first_name"] ?></h1>
+	</div>
 	<?php
 		foreach ($profile as $key => $value) {
 			$title = str_replace("_", " ", $key);
 			$title = ucwords($title);
 			$value = htmlentities($value);
 
-			print "<p>$title: $value</<p>";
+			print "<div class='row'<p>$title: $value</<p></div>";
 		}
 
 		print "<hr>";
-		// These two sections can be cleaned up and and modelled into a general
-		// case / function.
+		// These two sections can be cleaned up and and modelled into a 
+		//general case / function.
+
+		// Output CV and position history
 		if ( $position = get_position($pdo, $profile_id) ) {
-			print "<h3>Positions</h3><ul>";
+			print "<div class='row'><div class='col-sm'><h3>Positions & CV</h3></div>";
 		}
 
 		for ($i=0; $i < sizeof($position); $i++) {
-			echo '<li>' . $position[$i]['year'] . ': ';
-			echo $position[$i]['description'] . '</li>';
+			echo "<div class='row'> <span class='glyphicon glyphicon-chevron-right'></span>" . 
+			      $position[$i]['year'] . ": " . $position[$i]['description'] . "</div></div>";
 		}
 
+		// Output education history
 		if ( $education = get_education($pdo, $profile_id) ) {
-			print "</ul><h3>Education / Schools</h3><ul>";
+			print "<div class='col-sm'><h3>Education / Schools</h3>";
 		}
 
 		for ($i=0; $i < sizeof($education); $i++) {
-			echo '<li>' . $education[$i]['year'] . ': ';
-			echo $education[$i]['name'] . '</li>';
+			echo "<div class='row'> <span class='glyphicon glyphicon-chevron-right'></span>" .
+				  $education[$i]['year'] . ': ' . $education[$i]['name'] . "</div></div>";
 		}
-		print "</ul>";
+		print "</div>";
 
 		
 	?>
-	<p><a href="index.php">Done</a></p>
+	<div class="row"><a href="index.php">Done</a></div>
 
 </div>
 
