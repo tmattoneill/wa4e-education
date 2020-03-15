@@ -24,6 +24,7 @@
 					}
 				}
 			} else {
+				
 				if ($value == "") {
 					err_redir( $key . ": " . ERR_EMPTY_FIELDS, "add.php");
 				}
