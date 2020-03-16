@@ -4,7 +4,7 @@
 	$user = "webapp";
 	$dbpass = "Reggie12";
 	$db = "misc";
-	$host = "localhost";
+	$host = "192.168.1.150";
 	$port = "3306";
 
 	$pdo = new PDO("mysql:host=$host;port=$port;dbname=$db",$user, $dbpass);

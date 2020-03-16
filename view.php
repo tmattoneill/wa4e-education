@@ -8,7 +8,7 @@
 
 		// Output the basic user info
 		$sql = "SELECT first_name, last_name, email, headline, summary
-				FROM profile
+				FROM Profile
 				WHERE profile_id=?"; 
 
 		$stmt = $pdo->prepare($sql);
@@ -27,7 +27,7 @@
 
 function get_position($pdo, $profile_id) {
 
-	$sql = "SELECT * FROM position WHERE profile_id=? ORDER BY year DESC";
+	$sql = "SELECT * FROM Position WHERE profile_id=? ORDER BY year DESC";
 	$stmt = $pdo->prepare($sql);
 	$stmt->bindValue(1, $profile_id);
 	$stmt->execute();
