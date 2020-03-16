@@ -202,7 +202,7 @@
 							print '<div id="position' . $rank . '">';
 							print '<p>Year: <input type="text" name="year_pos[' . $rank . ']" value="' . $year . '">'; 
 							print '<input type="button" name="rem_pos" value="-" onclick="$(\'#position' . $rank . '\').remove(); return false;"></p>';
-							print '<textarea name="edu_desc[' . $rank . ']" rows="8" cols="80">' . $desc . '</textarea>';
+							print '<textarea name="pos_desc[' . $rank . ']" rows="8" cols="80">' . $desc . '</textarea>';
 							print '</div>';
 
 						}
@@ -225,7 +225,7 @@
 						for ($i=0; $i < sizeof($education); $i++) {
 							$year = htmlentities($education[$i]["year"]);
 							$desc = htmlentities($education[$i]["name"]);
-							$rank = $position[$i]["ranking"];
+							$rank = $education[$i]["ranking"];
 							$max_edu = ($rank > $max_edu) ? $rank : $max_edu; // always get the highest rank found
 
 							print '<div id="education' . $rank . '">';

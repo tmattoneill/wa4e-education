@@ -63,7 +63,7 @@ function get_education($pdo, $profile_id) {
 <body>
 <div class="container" id="main-content">
 	<div class="row">
-		<h1>Profile for: <?= $profile["first_name"] ?></h1>
+		<h1>Profile for: <?= $profile["first_name"] . " " . $profile["last_name"] ?></h1>
 		<?php flash_msg(); ?>
 	</div>
 	<?php

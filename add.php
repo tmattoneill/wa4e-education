@@ -40,6 +40,7 @@
 		}
 		// END FORM VALIDATION
 
+		// Add base informaition (required)
 		$stmt = $pdo->prepare('INSERT INTO Profile (user_id, 
 												    first_name, 
 												    last_name, 

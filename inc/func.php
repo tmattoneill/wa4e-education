@@ -186,28 +186,54 @@
 	    }
 	}
 
-		function insert_educations($pdo, $profile_id) {
-		$rank = 1;
+	function insert_educations($pdo, $profile_id) {
+		$rank = 1;											// <-- THIS COULD BE FUCKING THINGS UP (startng at 1 not 0;)
+
 	    for($i=1; $i<=9; $i++) {
 	        if ( ! isset($_POST['year_edu'][$i]) ) continue;
 	        if ( ! isset($_POST['edu_desc'][$i]) ) continue;
 
 	        $year = $_POST['year_edu'][$i];
-	        $desc = $_POST['edu_desc'][$i];
+	        $name = $_POST['edu_desc'][$i];
 
-	        // check if instituation name is in the Insitution table
-	        // if it is, add that insitition_id into the education table
-	        // else add a new record to the Insitution table, save the last 
-	        // inserted ID and save that to the Education table.
 
-	        $stmt = $pdo->prepare('INSERT INTO Education (profile_id, ranking, year, institution_id)
-	        					   VALUES ( :pid, :rank, :year, :institution_id)');
-	        $stmt->execute(array(
-	            ':pid' => $_REQUEST['profile_id'],
-	            ':rank' => $rank,
-	            ':year' => $year,
-	            ':institution_id' => $institution_id)
-	        );
+			$stmt = $pdo->prepare('SELECT institution_id 
+								   FROM Institution 
+								   WHERE name =:name');
+
+			$stmt->execute(array(':name' => $name));
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);
+			$institution_id = $row ? $row["institution_id"] : false;
+
+			if (! $institution_id ) {
+				$stmt = $pdo->prepare('INSERT INTO Institution (name) 
+									   VALUES ( :name) ');
+
+				$stmt->execute(array(':name' => $name));
+				$institution_id = $pdo->lastInsertId();
+			}
+
+			if (! $institution_id ) {
+				$_SESSION["error"] = "Error adding or finding that school.";
+				header("Location: add.php");
+				exit();
+			}
+
+    		$stmt = $pdo->prepare('INSERT INTO Education (profile_id, 
+    													  ranking, year, 
+    													  institution_id) 
+    							   VALUES ( :pid, 
+    							   			:rank, 
+    							   			:year, 
+    							   			:institution_id)');
+
+			$stmt->execute(array(
+			  ':pid' => $profile_id,
+			  ':rank' => $rank,
+			  ':year' => $year,
+			  ':institution_id' => $institution_id)
+			);
+
 	        $rank++;
 	    }
 	}
