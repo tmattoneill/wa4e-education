@@ -61,8 +61,6 @@ function validateAdd(arrTagNames) {
 		var fields = document.getElementsByTagName(tag);
 
 		for (const field of fields) {
-			var checking = field.getAttribute("name") + ": " + field.value;
-			alert(checking);
 			
 			// Check that all fields are completed
 			if ( field.value == "" ) {
@@ -73,6 +71,7 @@ function validateAdd(arrTagNames) {
 			// Check that the Year fields are numberic (e.g. 1999)
 			// There may be up to 9 of these so need to check them all.
 			if ( field.getAttribute("name").search("year") >= 0 ) {
+				//alert("Year must be numeric");
 				return (validateYear( field.value ));
 			}
 		}

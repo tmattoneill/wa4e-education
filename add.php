@@ -40,6 +40,7 @@
 		}
 		// END FORM VALIDATION
 
+		// Add base informaition (required)
 		$stmt = $pdo->prepare('INSERT INTO Profile (user_id, 
 												    first_name, 
 												    last_name, 
@@ -92,8 +93,7 @@
     			// store this entry's year and school in simple variables
     			$year = $_POST['edu_year'][$edu];
     			$school = $_POST['edu_school'][$edu];
-
-    			$institution_id = false;
+    			$institution_id = false;				// Why is this necessary?
 
     			// does the institution exist? If not, add it
 				$stmt = $pdo->prepare('SELECT institution_id 
