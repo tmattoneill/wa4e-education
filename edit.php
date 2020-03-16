@@ -64,15 +64,14 @@
         // Additional SQL statment pulls the postions associated with the current profile
 		// orders them in descending order by the ranking (ordinal); this could be changed to the
 		// year etc. field trivially.
-		$sql = "SELECT * FROM position WHERE profile_id=? ORDER BY ranking ASC";
+		$sql = "SELECT year, description, ranking  
+				FROM Position 
+				WHERE profile_id=? 
+				ORDER BY ranking ASC";
 		$stmt = $pdo->prepare($sql);
 		$stmt->bindValue(1, $profile_id);
 		$stmt->execute();
-		$position = $stmt->fetch(PDO::FETCH_ASSOC); // <-- this is the first row
-													//     of data returned from
-													//     the query. Or it is 
-													//     false if no positions
-													//	   were found.
+		$position = $stmt->fetchAll(PDO::FETCH_ASSOC); // get all rows
 
         // SQL for Education
 		$sql = "SELECT Institution.name, Education.ranking, Education.year 
@@ -84,14 +83,7 @@
 		$stmt = $pdo->prepare($sql);
 		$stmt->bindValue(1, $profile_id);
 		$stmt->execute();
-		$education = $stmt->fetch(PDO::FETCH_ASSOC); // <-- this is the first row
-													//     of data returned from
-													//     the query. Or it is 
-													//     false if no education records
-													//	   were found.
-
-
-
+		$education = $stmt->fetchAll(PDO::FETCH_ASSOC); // get all rows
 
 	}
 
@@ -116,6 +108,7 @@
 			exit;
 		} 
 
+		// Execute the update query on the base fields
 		$stmt = $pdo->prepare('UPDATE Profile 
 							   SET  first_name = :fn, 
 							   		last_name = :ln, 
@@ -133,13 +126,19 @@
     	);
 
 
-	    // Clear out the old position entries
-	    // and re-add the new set of positions
+	    // Clear out the old position entries and re-add the new set of positions
 	    $stmt = $pdo->prepare('DELETE FROM Position WHERE profile_id=:pid');
 	    $stmt->execute(array( ':pid' => $profile_id));
 
 	    // Insert the position entries
 	    insert_positions($pdo, $profile_id);
+
+	   	// Clear out the old education entries and re-add the new set of educations
+	    $stmt = $pdo->prepare('DELETE FROM Education WHERE profile_id=:pid');
+	    $stmt->execute(array( ':pid' => $profile_id));
+
+	    // Insert the position entries
+	    insert_educations($pdo, $profile_id);
     	
     	$_SESSION["success"] = "Record updated";
     	header("Location: index.php");
@@ -163,7 +162,7 @@
 </head>
 <body>
 <div class="container" id="main-content">
-	<h1> Adding Profile for <?= $_SESSION["name"] ?></h1>
+	<h1> Editing Profile for <?= $fn . " " . $ln ?></h1>
 	<!-- flash error -->
 	<?php flash_msg(); ?>
 	<form name="add_user" method="post" action="">
@@ -193,26 +192,24 @@
 
 					if ( $position )  {
 
-						do {
-							$year = htmlentities($position["year"]);
-							$desc = htmlentities($position["description"]);
-							$rank = $position["ranking"];
+						for ($i=0; $i < sizeof($position); $i++) {
+							
+							$year = htmlentities($position[$i]["year"]);
+							$desc = htmlentities($position[$i]["description"]);
+							$rank = $position[$i]["ranking"];
+							$max_pos = ($rank > $max_pos) ? $rank : $max_pos; // always get the highest rank found
 
 							print '<div id="position' . $rank . '">';
-							print "<h3>Position: $rank</h3>";
-							print '<p>Year: <input type="text" name="year[' . $rank . ']" value="' . $year . '">'; 
+							print '<p>Year: <input type="text" name="year_pos[' . $rank . ']" value="' . $year . '">'; 
 							print '<input type="button" name="rem_pos" value="-" onclick="$(\'#position' . $rank . '\').remove(); return false;"></p>';
-							print '<textarea name="desc[' . $rank . ']" rows="8" cols="80">' . $desc . '</textarea>';
+							print '<textarea name="edu_desc[' . $rank . ']" rows="8" cols="80">' . $desc . '</textarea>';
 							print '</div>';
 
-						} while ( $position = $stmt->fetch(PDO::FETCH_ASSOC) );
+						}
 
-						$max_pos = $rank; // this only works here because we've sorted in ascending order
-										  // an improvement would be to read in each position rank and then
-										  // grab the max value from that set.
 					}
 
-					print "<script>var max_positions = " . $max_pos . ";</script>";
+					print "<script>var max_positions = " . $max_pos . ";</script>"; // this is so we can start at the new max number
 				?>
 			</div>
 			<!-- End Position Management -->
@@ -225,26 +222,23 @@
 
 					if ( $education )  {
 
-						do {
-							$year = htmlentities($education["year"]);
-							$desc = htmlentities($education["name"]);
-							$rank = $position["ranking"];
+						for ($i=0; $i < sizeof($education); $i++) {
+							$year = htmlentities($education[$i]["year"]);
+							$desc = htmlentities($education[$i]["name"]);
+							$rank = $position[$i]["ranking"];
+							$max_edu = ($rank > $max_edu) ? $rank : $max_edu; // always get the highest rank found
 
 							print '<div id="education' . $rank . '">';
-							print "<h3>School: $rank</h3>";
-							print '<p>Year: <input type="text" name="year[' . $rank . ']" value="' . $year . '">'; 
+							print '<p>Year: <input type="text" name="year_edu[' . $rank . ']" value="' . $year . '">'; 
 							print '<input type="button" name="rem_edu" value="-" onclick="$(\'#education' . $rank . '\').remove(); return false;"></p>';
-							print '<input type="text" class="school" name="desc[' . $rank . ']" size="80" value="' . $desc . '">';
+							print '<input type="text" class="school" name="edu_desc[' . $rank . ']" size="80" value="' . $desc . '">';
 							print '</div>';
 
-						} while ( $education = $stmt->fetch(PDO::FETCH_ASSOC) );
+						} 
 
-						$max_pos = $rank; // this only works here because we've sorted in ascending order
-										  // an improvement would be to read in each position rank and then
-										  // grab the max value from that set.
 					}
 
-					print "<script>var max_educations = " . $max_edu . ";</script>";
+					print "<script>var max_educations = " . $max_edu . "; console.log('Edu: ' + max_educations);</script>";
 				?>
 			</div>
 			<!-- End Education Management -->
@@ -259,13 +253,13 @@
 
 </div>
 	<script>
-		<!-- /* Dynamically add Position year and description via jquery */ -->
+		<!-- /* Dynamically add Position & Education via jquery */ -->
 
-		<!-- /* BEGIN POSITIONS */ -->
-		num_positions = max_positions; // this is coming from the javascript above, pulling in the 
-									  // max rank number from the existing records.
-		num_educations = max_educations; // this is coming from the javascript above, pulling in the 
-									     // max rank number from the existing records.
+		var num_positions = max_positions; 		// this is coming from the javascript above, pulling in the 
+									  			// max rank number from the existing records.
+
+		var num_educations = max_educations; 	// this is coming from the javascript above, pulling in the 
+									     		// max rank number from the existing records.
 
 		$(document).ready(function(){
 			window.console && console.log("Document ready called");
@@ -282,13 +276,12 @@
 
 				$('#position_fields').append(
 					'<div id="position' + num_positions + '"> \
-					<h3>Position: ' + num_positions + '</h3> \
 					 <p>Year: <input type="text" \
-					 				 name="year[' + num_positions + ']" \
+					 				 name="year_pos[' + num_positions + ']" \
 					 				 value="" /> \
 					 <input type="button" name="rem_pos" value="-" \
 					 	onclick="$(\'#position' + num_positions + '\').remove(); num_positions--; return false;"></p> \
-					 <textarea name="desc[' + num_positions + ']" rows="8" cols="80"></textarea> \
+					 <textarea name="pos_desc[' + num_positions + ']" rows="8" cols="80"></textarea> \
 					 <input type="hidden" name="position[' + num_positions + ']" value="' + num_positions + '"> \
 					 </div>');				
 			});
@@ -306,13 +299,12 @@
 
 				$('#education_fields').append(
 					'<div id="education' + num_educations + '"> \
-					<h3>School: ' + num_educations + '</h3> \
 					 <p>Year: <input type="text" \
-					 				 name="year[' + num_educations + ']" \
+					 				 name="year_edu[' + num_educations + ']" \
 					 				 value="" /> \
 					 <input type="button" name="rem_edu" value="-" \
 					 	onclick="$(\'#education' + num_educations + '\').remove(); num_educations--; return false;"></p> \
-					 <input type="text" class="school" name="desc[' + num_educations + ']" size="80"> \
+					 <input type="text" class="school" name="edu_desc[' + num_educations + ']" size="80"> \
 					 <input type="hidden" name="education[' + num_educations + ']" value="' + num_educations + '"> \
 					 </div>');				
 			});

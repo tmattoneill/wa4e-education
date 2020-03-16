@@ -168,11 +168,11 @@
 	function insert_positions($pdo, $profile_id) {
 		$rank = 1;
 	    for($i=1; $i<=9; $i++) {
-	        if ( ! isset($_POST['year'][$i]) ) continue;
-	        if ( ! isset($_POST['desc'][$i]) ) continue;
+	        if ( ! isset($_POST['year_pos'][$i]) ) continue;
+	        if ( ! isset($_POST['pos_desc'][$i]) ) continue;
 
-	        $year = $_POST['year'][$i];
-	        $desc = $_POST['desc'][$i];
+	        $year = $_POST['year_pos'][$i];
+	        $desc = $_POST['pos_desc'][$i];
 
 	        $stmt = $pdo->prepare('INSERT INTO Position (profile_id, ranking, year, description)
 	        					   VALUES ( :pid, :rank, :year, :desc)');
@@ -189,11 +189,11 @@
 		function insert_educations($pdo, $profile_id) {
 		$rank = 1;
 	    for($i=1; $i<=9; $i++) {
-	        if ( ! isset($_POST['year'][$i]) ) continue;
-	        if ( ! isset($_POST['desc'][$i]) ) continue;
+	        if ( ! isset($_POST['year_edu'][$i]) ) continue;
+	        if ( ! isset($_POST['edu_desc'][$i]) ) continue;
 
-	        $year = $_POST['year'][$i];
-	        $desc = $_POST['desc'][$i];
+	        $year = $_POST['year_edu'][$i];
+	        $desc = $_POST['edu_desc'][$i];
 
 	        // check if instituation name is in the Insitution table
 	        // if it is, add that insitition_id into the education table
